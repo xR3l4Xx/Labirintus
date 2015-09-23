@@ -1,0 +1,147 @@
+#include <iostream>
+#include <conio.h>
+#include <stdlib.h>
+#include <fstream>
+
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
+#define KEY_ESC 27
+#define KEY_SPACE 32
+#define KEY_0 48
+#define KEY_1 49
+#define KEY_2 50
+
+using namespace std;
+
+char myMap[50][15];
+int x=1, y=1;
+char positionType;
+
+void readMap(){
+    fstream be;
+    be.open("Map.txt");
+    for(int i=0;i<15;i++){
+        for(int j=0;j<50;j++){
+            be >> myMap[j][i];
+        }
+    }
+    be.close();
+}
+void writeMap(){
+    ofstream ki;
+    ki.open("Map.txt");
+    for(int i=0;i<15;i++){
+        for(int j=0;j<50;j++){
+            ki << myMap[j][i];
+        }
+    }
+    ki.close();
+}
+
+void createEmpty(){
+    for(int i=0;i<50;i++){
+        for(int j=0;j<15;j++){
+            myMap[i][j]='e';
+        }
+    }
+    for(int i=0;i<50;i++){
+        myMap[i][0]='w';
+        myMap[i][14]='w';
+    }
+    for(int j=0;j<15;j++){
+        myMap[0][j]='w';
+        myMap[49][j]='w';
+    }
+    myMap[x][y]='c';
+}
+
+void draw(){
+    system("cls");
+    for(int i=0;i<15;i++){
+        for(int j=0;j<50;j++){
+            if(myMap[j][i]=='e'){cout<<" ";}
+            if(myMap[j][i]=='w'){cout<<"#";}
+            if(myMap[j][i]=='c'){cout<<".";}
+        }
+        cout << "\n";
+    }
+}
+
+bool exit(){
+    bool r=true;
+    int valasz;
+    system("cls");
+    cout << "Mented a palyat?" << endl;
+    cout << "[0] - Igen\t[1] - Nem\t[2] - Megse"<<endl;
+    switch(_getch()){
+    case KEY_0:
+        writeMap();
+        r=false;
+        break;
+    case KEY_1:
+        r=false;
+        break;
+    case KEY_2:
+        r=true;
+        break;
+    }
+    return r;
+}
+
+int main()
+{
+    bool running = true;
+    createEmpty();
+    readMap();
+    positionType = 'e';
+    draw();
+
+    while ( running ){
+        switch(_getch()){
+        case KEY_UP:
+            if(y>1){
+                myMap[x][y] = positionType;
+                positionType = myMap[x][y-1];
+                y--;
+                myMap[x][y]='c';
+            }
+            break;
+        case KEY_DOWN:
+            if(y<13){
+                myMap[x][y] = positionType;
+                positionType = myMap[x][y+1];
+                y++;
+                myMap[x][y]='c';
+            }
+            break;
+        case KEY_LEFT:
+            if(x>1){
+                myMap[x][y] = positionType;
+                positionType = myMap[x-1][y];
+                x--;
+                myMap[x][y]='c';
+            }
+            break;
+        case KEY_RIGHT:
+            if(x<48){
+                myMap[x][y] = positionType;
+                positionType = myMap[x+1][y];
+                x++;
+                myMap[x][y]='c';
+            }
+            break;
+        case KEY_SPACE:
+            if(positionType=='e'){positionType='w';}else{positionType='e';}
+            myMap[x][y]=positionType;
+            break;
+        case KEY_ESC:
+            running = exit();
+            break;
+        }
+        if(running)draw();
+        else system("cls");
+    }
+    return 0;
+}
