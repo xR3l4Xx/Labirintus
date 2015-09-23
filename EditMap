@@ -101,7 +101,7 @@ int main()
     while ( running ){
         switch(_getch()){
         case KEY_UP:
-            if(y>1){
+            if(y>0){
                 myMap[x][y] = positionType;
                 positionType = myMap[x][y-1];
                 y--;
@@ -109,7 +109,7 @@ int main()
             }
             break;
         case KEY_DOWN:
-            if(y<13){
+            if(y<14){
                 myMap[x][y] = positionType;
                 positionType = myMap[x][y+1];
                 y++;
@@ -117,7 +117,7 @@ int main()
             }
             break;
         case KEY_LEFT:
-            if(x>1){
+            if(x>0){
                 myMap[x][y] = positionType;
                 positionType = myMap[x-1][y];
                 x--;
@@ -125,7 +125,7 @@ int main()
             }
             break;
         case KEY_RIGHT:
-            if(x<48){
+            if(x<49){
                 myMap[x][y] = positionType;
                 positionType = myMap[x+1][y];
                 x++;
